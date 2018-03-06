@@ -2,11 +2,11 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>blockchain</groupId>
-	<artifactId>88seguros</artifactId>
+	<artifactId>template</artifactId>
 	<packaging>war</packaging>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>88seguros API Webapp</name>
-	<description>API de integração entre o back-end e a rede Blockchain</description>
+	<name>template API Webapp</name>
+	<description>template ASB</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -151,7 +151,7 @@
 				</configuration>
 			</plugin>
 		</plugins>
-		<finalName>88seguros</finalName>
+		<finalName>WEB-API</finalName>
 	</build>
 
 </project>

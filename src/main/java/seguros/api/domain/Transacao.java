@@ -34,9 +34,6 @@ public class Transacao  implements Serializable {
 	@Column(name = "id_transacao")
 	private Long id;
 
-	@Column(name = "hash_transacao")
-	private String hash;
-	
 	@Column(name = "dh_transacao")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dataTransacao;
@@ -53,8 +50,8 @@ public class Transacao  implements Serializable {
 	@JoinColumn(name="id_usuario_inclusao")
 	private Usuario usuarioInclusao;		
 	
-	@Column(name = "qtd_pontos", nullable = false)
-	private BigDecimal qtdPontos;
+	@Column(name = "vlr_valor", nullable = false)
+	private BigDecimal vlrValor;
 	
 	public Long getId() {
 		return id;
@@ -62,14 +59,6 @@ public class Transacao  implements Serializable {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public String getHash() {
-		return hash;
-	}
-
-	public void setHash(String hash) {
-		this.hash = hash;
 	}
 
 	public Date getDataTransacao() {
@@ -96,15 +85,6 @@ public class Transacao  implements Serializable {
 		this.destino = destino;
 	}
 
-	@JsonSerialize(using=DoubleSerializer.class)
-	@JsonProperty("qtdPontos")
-	public BigDecimal getQtdPontos() {
-		return qtdPontos;
-	}
-
-	public void setQtdPontos(BigDecimal qtdPontos) {
-		this.qtdPontos = qtdPontos;
-	}
 
 	@Transient
 	public String getDataFormatada() {
@@ -113,6 +93,16 @@ public class Transacao  implements Serializable {
 		}catch(Exception e){
 			return "";
 		}
+	}
+
+	@JsonSerialize(using=DoubleSerializer.class)
+	@JsonProperty("vlrValor")
+	public BigDecimal getVlrValor() {
+		return vlrValor;
+	}
+
+	public void setVlrValor(BigDecimal vlrValor) {
+		this.vlrValor = vlrValor;
 	}
 
 	public Usuario getUsuarioInclusao() {

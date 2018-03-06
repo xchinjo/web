@@ -1,6 +1,7 @@
 package seguros.api.spring;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
@@ -20,10 +21,12 @@ public class MvcConfig extends WebMvcConfigurerAdapter{
 	
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/home").setViewName("home");
-        registry.addViewController("/zscore").setViewName("zscore");
-        registry.addViewController("/proNatura").setViewName("proNatura");
+        registry.addViewController("/index").setViewName("index");
+        registry.addViewController("/charts").setViewName("charts");
+        registry.addViewController("/tables").setViewName("tables");
+        registry.addViewController("/navbar").setViewName("navbar");
         registry.addViewController("/login").setViewName("login");
+        registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
     }
 	
 }

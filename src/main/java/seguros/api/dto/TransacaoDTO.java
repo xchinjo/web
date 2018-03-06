@@ -28,10 +28,8 @@ public class TransacaoDTO implements Serializable{
 	public TransacaoDTO(Transacao t){
 		this.setId(t.getId());
 		this.setDataTransacao(getFormatedDate(t.getDataTransacao()));
-		this.setDestino(t.getDestino().getNome());
-		this.setHash(t.getHash());
 		this.setOrigem(t.getOrigem().getNome());
-		this.setQtdPontos(t.getQtdPontos().doubleValue());
+		this.setValor(t.getVlrValor().doubleValue());
 	}
 
 	public Long getId() {
@@ -40,14 +38,6 @@ public class TransacaoDTO implements Serializable{
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public String getHash() {
-		return hash;
-	}
-
-	public void setHash(String hash) {
-		this.hash = hash;
 	}
 
 	public String getDataTransacao() {
@@ -66,24 +56,16 @@ public class TransacaoDTO implements Serializable{
 		this.origem = origem;
 	}
 
-	public String getDestino() {
-		return destino;
-	}
-
-	public void setDestino(String destino) {
-		this.destino = destino;
-	}
-
 	@JsonSerialize(using=DoubleSerializer.class)
-	@JsonProperty("qtdPontos")
-	public Double getQtdPontos() {
-		return qtdPontos;
+	@JsonProperty("valor")	
+	public Double getValor() {
+		return valor;
 	}
 
-	public void setQtdPontos(Double qtdPontos) {
-		this.qtdPontos = qtdPontos;
+	public void setValor(Double valor) {
+		this.valor = valor;
 	}
-	
+
 	public String getIdUsuario() {
 		return idUsuario;
 	}
@@ -96,15 +78,11 @@ public class TransacaoDTO implements Serializable{
 
 	private Long id;
 
-	private String hash;
-	
 	private String dataTransacao;
 	
 	private String origem;
 	
-	private String destino;	
-	
-	private Double qtdPontos;
+	private Double valor;
 	
 	public static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 	
