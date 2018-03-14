@@ -1,18 +1,18 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>blockchain</groupId>
-	<artifactId>template</artifactId>
+	<groupId>br.com.bjbraz</groupId>
+	<artifactId>notas</artifactId>
 	<packaging>war</packaging>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>template API Webapp</name>
-	<description>template ASB</description>
+	<name>Notas API Webapp</name>
+	<description>Notas ASB</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.5.3.RELEASE</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<version>2.0.0.RELEASE</version>
+		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 
 	<properties>
@@ -30,21 +30,24 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
-			
-			<exclusions>
-                <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-tomcat</artifactId>
-                </exclusion>
-            </exclusions>			
-			
-		</dependency>
 
-		<!-- PostgreSQL JDBC driver -->
+			<!-- <exclusions> -->
+			<!-- <exclusion> -->
+			<!-- <groupId>org.springframework.boot</groupId> -->
+			<!-- <artifactId>spring-boot-starter-tomcat</artifactId> -->
+			<!-- </exclusion> -->
+			<!-- </exclusions> -->
+
+		</dependency>
+		
 		<dependency>
-			<groupId>org.postgresql</groupId>
-			<artifactId>postgresql</artifactId>
-			<scope>runtime</scope>
+			<groupId>org.apache.tomcat.embed</groupId>
+			<artifactId>tomcat-embed-jasper</artifactId>
+		</dependency>
+		<dependency>
+		    <groupId>org.eclipse.jdt.core.compiler</groupId>
+		    <artifactId>ecj</artifactId>
+		    <version>4.6.1</version>
 		</dependency>
 
 		<!-- TEST DEPENDENCIES -->
@@ -55,7 +58,7 @@
 			<scope>test</scope>
 		</dependency>
 
-		<!-- Spock (A Groovy based testframework running on top of the JUnit runner)  -->
+		<!-- Spock (A Groovy based testframework running on top of the JUnit runner) -->
 		<!-- https://mvnrepository.com/artifact/org.spockframework/spock-core -->
 		<dependency>
 			<groupId>org.spockframework</groupId>
@@ -64,7 +67,8 @@
 			<scope>test</scope>
 		</dependency>
 
-		<!-- Spock-Spring: Use the Spring TestContext framework together with Spock for Integration Tests -->
+		<!-- Spock-Spring: Use the Spring TestContext framework together with Spock 
+			for Integration Tests -->
 		<!-- https://mvnrepository.com/artifact/org.spockframework/spock-spring -->
 		<dependency>
 			<groupId>org.spockframework</groupId>
@@ -89,48 +93,40 @@
 			<version>1.4.195</version>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<!-- Servlet -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
-			<artifactId>servlet-api</artifactId>
-			<version>2.5</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>javax.servlet.jsp</groupId>
-			<artifactId>jsp-api</artifactId>
-			<version>2.1</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>javax.servlet</groupId>
 			<artifactId>jstl</artifactId>
-			<version>1.2</version>
 		</dependency>
-		
+
 		<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<version>5.1.38</version>
+			<version>5.1.45</version>
 		</dependency>
 
 		<dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>
-        
-		<dependency>
-		  <groupId>org.web3j</groupId>
-		  <artifactId>core</artifactId>
-		  <version>3.2.0</version>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
-     
+
+		<!-- https://mvnrepository.com/artifact/org.apache.tomcat.embed/tomcat-embed-jasper -->
+		<!-- <dependency> -->
+		<!-- <groupId>org.apache.tomcat.embed</groupId> -->
+		<!-- <artifactId>tomcat-embed-jasper</artifactId> -->
+		<!-- <version>8.5.29</version> -->
+		<!-- </dependency> -->
+
+
+
 	</dependencies>
 
 	<build>
+
 		<plugins>
+
 			<!-- Spring Boot Maven Plugin -->
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
@@ -138,7 +134,8 @@
 			</plugin>
 
 			<!-- Optional plugins for using Spock -->
-			<!-- Only required if names of spec classes don't match default Surefire patterns (`*Test` etc.) -->
+			<!-- Only required if names of spec classes don't match default Surefire 
+				patterns (`*Test` etc.) -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
@@ -150,8 +147,9 @@
 					</includes>
 				</configuration>
 			</plugin>
+
 		</plugins>
-		<finalName>WEB-API</finalName>
+		<finalName>E-SOCIAL-WEB</finalName>
 	</build>
 
 </project>
