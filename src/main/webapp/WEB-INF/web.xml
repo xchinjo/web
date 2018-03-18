@@ -4,6 +4,8 @@
 
 <web-app>
 	<display-name>eSocial - Application</display-name>
-
+	<welcome-file-list>
+	    <welcome-file>index</welcome-file>
+	</welcome-file-list>
 
 </web-app>

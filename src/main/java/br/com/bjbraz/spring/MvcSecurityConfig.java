@@ -24,15 +24,15 @@ public class MvcSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.csrf().disable().authorizeRequests().antMatchers("/resources/**").permitAll().antMatchers("/index")
-		.authenticated()
-//		.permitAll()
+//		.authenticated()
+		.permitAll()
 		.anyRequest().hasAnyRole("ADMIN")
 		.anyRequest().authenticated()
 		//.antMatchers("/**", "/rest/listTodasTrancoes").authenticated().anyRequest().hasAnyRole("ADMIN")
 		.and().formLogin()
 		.loginPage("/login").usernameParameter("userName").passwordParameter("password")
 		.successHandler((req,res,auth)->{
-			res.sendRedirect("/index");
+			res.sendRedirect("/dashboard");
 	      })
 		.failureHandler((req,res,exp)->{
 			String errMsg="";
@@ -49,7 +49,7 @@ public class MvcSecurityConfig extends WebSecurityConfigurerAdapter {
 		.logout()
 		.logoutUrl("/logout")
 		.clearAuthentication(true)
-		.logoutSuccessUrl("/login")
+		.logoutSuccessUrl("/index")
 		.permitAll(); //.httpBasic() para utilizar autenticação do browser
 	}
 	

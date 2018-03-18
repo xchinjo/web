@@ -35,23 +35,30 @@ public class IndexController {
 	@RequestMapping(value = ContractRestURIConstants.ROOT, method = RequestMethod.GET)
 	public ModelAndView inicio(Model model, Principal principal) {
 		System.out.println("Executou... /index");
-		ModelAndView mav = new ModelAndView("index");
+		ModelAndView mav = new ModelAndView("/index");
 		return mav;
 	}
 	
 	@RequestMapping(value = ContractRestURIConstants.LOGIN, method = RequestMethod.GET)
 	public String login() {
 		System.out.println("Executou... /login");
-		ModelAndView mav = new ModelAndView("login");
+		ModelAndView mav = new ModelAndView("/login");
 		return "login";
 	}
 	
 	@RequestMapping(value = ContractRestURIConstants.INDEX, method = RequestMethod.GET)
 	public ModelAndView index() {
 		System.out.println("Executou... /index");
-		ModelAndView mav = new ModelAndView("index");
+		ModelAndView mav = new ModelAndView("/index");
 		return mav;
 	}
+	
+	@RequestMapping(value = ContractRestURIConstants.DASHBOARD, method = RequestMethod.GET)
+	public ModelAndView dashbord() {
+		System.out.println("Executou... /dashboard");
+		ModelAndView mav = new ModelAndView("/dashboard");
+		return mav;
+	}	
 
 
 }
