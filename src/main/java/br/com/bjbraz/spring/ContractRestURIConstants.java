@@ -11,5 +11,6 @@ public class ContractRestURIConstants {
 	public static final String INDEX = "/index";
 	public static final String ROOT = "/";
 	public static final String DASHBOARD = "/dashboard";
+	public static final String CONTRATAR = "/contratar";
 
 }

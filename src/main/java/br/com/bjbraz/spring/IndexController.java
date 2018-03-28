@@ -39,6 +39,13 @@ public class IndexController {
 		return mav;
 	}
 	
+	@RequestMapping(value = ContractRestURIConstants.CONTRATAR, method = RequestMethod.GET)
+	public ModelAndView contratar(Model model, Principal principal) {
+		System.out.println("Executou... /contratar");
+		ModelAndView mav = new ModelAndView("/contratar");
+		return mav;
+	}	
+	
 	@RequestMapping(value = ContractRestURIConstants.LOGIN, method = RequestMethod.GET)
 	public String login() {
 		System.out.println("Executou... /login");
