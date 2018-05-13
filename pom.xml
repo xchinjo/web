@@ -1,9 +1,10 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>br.com.bjbraz</groupId>
 	<artifactId>notas</artifactId>
-	<packaging>war</packaging>
+<!-- 	<packaging>jar</packaging> -->
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Notas API Webapp</name>
 	<description>Notas ASB</description>
@@ -19,6 +20,8 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
+		<!-- The main class to start by executing java -jar -->
+		<start-class>br.com.bjbraz.spring.Application</start-class>
 	</properties>
 
 	<!-- Spring Boot Starters -->
@@ -39,15 +42,15 @@
 			<!-- </exclusions> -->
 
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.apache.tomcat.embed</groupId>
 			<artifactId>tomcat-embed-jasper</artifactId>
 		</dependency>
 		<dependency>
-		    <groupId>org.eclipse.jdt.core.compiler</groupId>
-		    <artifactId>ecj</artifactId>
-		    <version>4.6.1</version>
+			<groupId>org.eclipse.jdt.core.compiler</groupId>
+			<artifactId>ecj</artifactId>
+			<version>4.6.1</version>
 		</dependency>
 
 		<!-- TEST DEPENDENCIES -->
@@ -119,37 +122,22 @@
 		<!-- <version>8.5.29</version> -->
 		<!-- </dependency> -->
 
-
-
+		<!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient -->
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.5.5</version>
+		</dependency>
 	</dependencies>
 
 	<build>
-
-		<plugins>
-
-			<!-- Spring Boot Maven Plugin -->
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-
-			<!-- Optional plugins for using Spock -->
-			<!-- Only required if names of spec classes don't match default Surefire 
-				patterns (`*Test` etc.) -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.20</version>
-				<configuration>
-					<useFile>false</useFile>
-					<includes>
-						<include>**/*Spec.java</include>
-					</includes>
-				</configuration>
-			</plugin>
-
-		</plugins>
-		<finalName>E-SOCIAL-WEB</finalName>
+			<plugins>
+				<plugin>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-maven-plugin</artifactId>
+				</plugin>
+			</plugins>
+		<finalName>BLOCKCHAIN-WEB</finalName>
 	</build>
 
 </project>

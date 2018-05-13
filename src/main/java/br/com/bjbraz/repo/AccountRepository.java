@@ -5,7 +5,7 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import br.com.bjbraz.domain.Conta;
+import br.com.bjbraz.domain.Account;
 
 /**
  * 
@@ -13,15 +13,21 @@ import br.com.bjbraz.domain.Conta;
  *
  */
 @Repository
-public interface ContaRepository  extends JpaRepository<Conta, Long>{
+public interface AccountRepository  extends JpaRepository<Account, Long>{
 	
 	/**
 	 * 
 	 * @param id
 	 * @return
 	 */
-	public Optional<Conta> findById(Long id);
+	public Optional<Account> findById(Long id);
 	
+	/**
+	 * 
+	 * @param name
+	 * @return
+	 */
+	public Optional<Account> findByUserNameLike(String name);
 	
 
 }

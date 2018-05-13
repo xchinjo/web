@@ -1,0 +1,36 @@
+{
+	"data": {
+		"accountStatus": "REGULAR",
+		"balances": [
+			{
+				"balanceType": "REAL",
+				"date": "2018-04-06",
+				"amount": 5,
+				"accountId": "03828F0A-F12A-D2F0-5F78-A2C62E820FF2"
+			},
+			{
+				"balanceType": "AVAILABLE",
+				"date": "2018-04-06",
+				"amount": 5,
+				"accountId": "03828F0A-F12A-D2F0-5F78-A2C62E820FF2"
+			},
+			{
+				"balanceType": "FUTURE",
+				"amount": 0,
+				"accountId": "03828F0A-F12A-D2F0-5F78-A2C62E820FF2"
+			},
+			{
+				"balanceType": "OVERDRAFT",
+				"date": "2018-04-06",
+				"amount": 0,
+				"accountId": "03828F0A-F12A-D2F0-5F78-A2C62E820FF2"
+			},
+			{
+				"balanceType": "BLOCKED",
+				"date": "2018-04-06",
+				"amount": 0,
+				"accountId": "03828F0A-F12A-D2F0-5F78-A2C62E820FF2"
+			}
+		]
+	}
+}

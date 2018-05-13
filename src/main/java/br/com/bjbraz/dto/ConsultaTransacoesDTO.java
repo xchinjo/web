@@ -13,14 +13,14 @@ public class ConsultaTransacoesDTO implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 2291329610167813128L;
-	private List<TransacaoDTO> itens = new ArrayList<TransacaoDTO>();
+	private List<TransactionDTO> itens = new ArrayList<TransactionDTO>();
 
 	@JsonSerialize(typing = Typing.STATIC)
-	public List<TransacaoDTO> getItens() {
+	public List<TransactionDTO> getItens() {
 		return itens;
 	}
 
-	public void setItens(List<TransacaoDTO> itens) {
+	public void setItens(List<TransactionDTO> itens) {
 		this.itens = itens;
 	}
 	

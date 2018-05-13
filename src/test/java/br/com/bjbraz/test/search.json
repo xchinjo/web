@@ -1,0 +1,65 @@
+{
+	"data": {
+		"accountHolderId": "DC7889CA-0B50-AC0F-E4F0-A64FF83F0C1D",
+		"billingAddress": {
+			"logradouro": "RUA AMAURI",
+			"numero": "116",
+			"bairro": "JARDIM EUROPA",
+			"cidade": "SAO PAULO",
+			"estado": "SP",
+			"cep": "1448000",
+			"pais": "BRA"
+		},
+		"account": {
+			"accountId": "03828F0A-F12A-D2F0-5F78-A2C62E820FF2",
+			"account": 95680,
+			"branch": 1,
+			"mobilePhone": {
+				"country": "BRA",
+				"phoneNumber": "11950238101"
+			}
+		},
+		"client": {
+			"name": "FCH CAPITAL",
+			"email": "CONTATO@FCHCAPITAL.COM",
+			"taxIdentifier": {
+				"taxId": "72263530000133",
+				"country": "BRA"
+			},
+			"mobilePhone": {
+				"country": "BRA",
+				"phoneNumber": "11950238101"
+			}
+		},
+		"additionalDetailsCorporate": {
+			"representatives": [
+				{
+					"name": "RODRIGO MENDES",
+					"email": "REPRESENTANTE.PJ@FCHCAPITAL.COM",
+					"taxIdentifier": {
+						"taxId": "52350467490",
+						"country": "BRA"
+					},
+					"mobilePhone": {
+						"country": "BRA",
+						"phoneNumber": "11950238102"
+					}
+				}
+			],
+			"representative": {
+				"name": "RODRIGO MENDES",
+				"email": "REPRESENTANTE.PJ@FCHCAPITAL.COM",
+				"taxIdentifier": {
+					"taxId": "52350467490",
+					"country": "BRA"
+				},
+				"mobilePhone": {
+					"country": "BRA",
+					"phoneNumber": "11950238102"
+				}
+			}
+		},
+		"accountStatus": "REGULAR",
+		"clientType": "CORPORATE"
+	}
+}

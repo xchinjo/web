@@ -12,20 +12,20 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import br.com.bjbraz.service.UsuarioService;
+import br.com.bjbraz.service.UserService;
 
 @Configuration
 @EnableWebSecurity
 public class MvcSecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
-	private UsuarioService userDetailsService;
+	private UserService userDetailsService;
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.csrf().disable().authorizeRequests().antMatchers("/resources/**").permitAll().antMatchers("/index")
 //		.authenticated()
-		.permitAll()
+		.permitAll().antMatchers("/rest/**").permitAll()
 		.anyRequest().hasAnyRole("ADMIN")
 		.anyRequest().authenticated()
 		//.antMatchers("/**", "/rest/listTodasTrancoes").authenticated().anyRequest().hasAnyRole("ADMIN")

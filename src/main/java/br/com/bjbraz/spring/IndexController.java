@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import br.com.bjbraz.service.ContaService;
-import br.com.bjbraz.service.TransacaoService;
+import br.com.bjbraz.service.AccountService;
+import br.com.bjbraz.service.TransactionService;
 
 /**
  * 
@@ -20,14 +20,14 @@ import br.com.bjbraz.service.TransacaoService;
 @Controller
 public class IndexController {
  
-	private TransacaoService transacaoService;
-	private ContaService contaService;
+	private TransactionService transacaoService;
+	private AccountService contaService;
 	
 	private static final String RETORNO_ERRO = "Erro valores inválidos";
 	
 
 	@Autowired
-	IndexController(TransacaoService t, ContaService c) {
+	IndexController(TransactionService t, AccountService c) {
 		this.transacaoService = t;
 		this.contaService     = c;
 	}

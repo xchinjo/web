@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize.Typing;
 import com.fasterxml.jackson.databind.ser.std.DateSerializer;
 
-import br.com.bjbraz.domain.Usuario;
+import br.com.bjbraz.domain.User;
 
 /**
  * @author alex.braz
@@ -22,7 +22,7 @@ public class StatusLogin implements Serializable{
 	private String mensagem;
 	private String email;
 	private String nome;
-	private Usuario usuario;
+	private User usuario;
 	private Date dataLogin;
 	
 	public String getMensagem() {
@@ -45,10 +45,10 @@ public class StatusLogin implements Serializable{
 	}
 	
 	@JsonSerialize(typing=Typing.STATIC)
-	public Usuario getUsuario() {
+	public User getUsuario() {
 		return usuario;
 	}
-	public void setUsuario(Usuario usuario) {
+	public void setUsuario(User usuario) {
 		this.usuario = usuario;
 	}
 	

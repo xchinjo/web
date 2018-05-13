@@ -1,0 +1,13 @@
+{
+	"data": {
+		"accountHolderId": "C3A37BCC-631E-E9DF-79CF-8AC79258CB38",
+		"account": {
+			"accountId": "3974074A-E03B-DA0F-BC75-E3D629D2996C",
+			"mobilePhone": {
+				"country": "BRA",
+				"phoneNumber": "872624880001032018049615230509"
+			}
+		},
+		"accountStatus": "CREATING"
+	}
+}

@@ -1,25 +1,32 @@
 package br.com.bjbraz.spring;
 
-import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.util.List;
+import java.net.URI;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import br.com.bjbraz.domain.Conta;
-import br.com.bjbraz.domain.Transacao;
-import br.com.bjbraz.dto.ConsultaTransacoesDTO;
-import br.com.bjbraz.dto.TransacaoDTO;
-import br.com.bjbraz.service.ContaService;
-import br.com.bjbraz.service.TransacaoService;
-import org.springframework.web.bind.annotation.RestController;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import br.com.bjbraz.dto.account.AdditionalDetailsPersonDTO;
+import br.com.bjbraz.dto.account.BillingAddressDTO;
+import br.com.bjbraz.dto.account.ClientDTO;
+import br.com.bjbraz.dto.account.CreateAccountDTO;
+import br.com.bjbraz.dto.account.MobilePhoneDTO;
+import br.com.bjbraz.dto.account.RgDTO;
+import br.com.bjbraz.dto.account.TaxIdentifierDTO;
+import br.com.bjbraz.exception.UserNotFoundException;
+import br.com.bjbraz.service.AccountService;
+import br.com.bjbraz.service.TransactionService;
+import br.com.bjbraz.service.UserService;
 
 
 /**
@@ -30,99 +37,118 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class IndexRestController {
 
-	private TransacaoService transacaoService;
-	private ContaService contaService;
+	private TransactionService transacaoService;
+	private AccountService accountService;
+	private UserService userService;
 
-	private static final String RETORNO_ERRO = "Erro valores inválidos";
+	private static final String RETORNO_ERRO = "Invalid Values";
 
 	@Autowired
-	IndexRestController(TransacaoService t, ContaService c) {
+	IndexRestController(TransactionService t, AccountService c, UserService u) {
 		this.transacaoService = t;
-		this.contaService = c;
+		this.accountService = c;
+		this.userService = u;
 	}
-
+	
 	@CrossOrigin
-	@RequestMapping(value = ContractRestURIConstants.SALDO, method = RequestMethod.GET)
-	public String consultarSaldo(@PathVariable("id") String sconta) {
-		Conta conta = contaService.consultarPorId(Long.parseLong(sconta));
-
-		String retorno = "";
-
-		try {
-			if (conta != null && conta.getSaldo() != null) {
-				BigDecimal bd = conta.getSaldo();
-
-				DecimalFormatSymbols symbol = new DecimalFormatSymbols();
-				symbol.setDecimalSeparator(' ');
-				symbol.setGroupingSeparator(' ');
-
-				DecimalFormat df = new DecimalFormat("#,###", symbol);
-				retorno = df.format(bd);
-			}
-		} catch (Exception e) {
-			retorno = "0";
-		}
-
-		return retorno;
-	}
-
-	@CrossOrigin
-	@RequestMapping(value = ContractRestURIConstants.SAQUE, method = RequestMethod.POST)
-	public TransacaoDTO saque(@RequestBody TransacaoDTO simpleTransacao) {
-
-		/**
-		 * Verifica valores nulos
-		 */
-		if (simpleTransacao == null || simpleTransacao.getValor() == null
-				|| simpleTransacao.getValor().doubleValue() < 10) {
-			simpleTransacao.setMensagem(RETORNO_ERRO);
-			return simpleTransacao;
-		}
-
-		/**
-		 * Não permitir casa decimal
-		 */
-		if (simpleTransacao.getValor() % 1 != 0) {
-			simpleTransacao.setMensagem(RETORNO_ERRO);
-			return simpleTransacao;
-		}
-
-		try {
-			/**
-			 * Efetua o processamento do saque, persistência e lógica de contagem de notas
-			 */
-			simpleTransacao = transacaoService.saque(simpleTransacao);
-
-		} catch (IllegalArgumentException e) {
-			simpleTransacao.setMensagem(e.getMessage());
-			return simpleTransacao;
-		} catch (Exception ex) {
-			simpleTransacao.setMensagem(ex.getMessage());
-			return simpleTransacao;
-		}
-
-		return simpleTransacao;
-
-	}
-
-	@CrossOrigin
-	@RequestMapping(value = ContractRestURIConstants.LISTAR_TODAS_TRANSACOES, method = RequestMethod.GET)
-	public ConsultaTransacoesDTO listarTodasTransacoes() {
-		ConsultaTransacoesDTO retorno = new ConsultaTransacoesDTO();
-		List<Transacao> entidades = transacaoService.listarTodos();
-		try {
-			/**
-			 * 
-			 */
-			if (entidades != null && !entidades.isEmpty()) {
-				entidades.forEach((item) -> retorno.getItens().add(new TransacaoDTO(item)));
-			}
-
-			return retorno;
-		} catch (Exception e) {
+	@RequestMapping(value = ContractRestURIConstants.CRIAR_CONTA_PF, method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)	
+	public String createAccount(@RequestHeader(value="transaction-hash") String hash, @RequestBody CreateAccountDTO create) {
+		
+		if(hash == null) {
 			return null;
 		}
-
+		
+		this.validateCreate(create);
+		
+		create.setAccountType(ContractRestURIConstants.CONTA_PF);
+		
+		ObjectMapper mapper = new ObjectMapper();
+        try {
+            String json = mapper.writeValueAsString(create);
+            System.out.println("JSON = " + json);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+		
+		return "";
 	}
+	
+	@CrossOrigin
+	@RequestMapping(value = ContractRestURIConstants.CRIAR_CONTA_PF_TEST, method = RequestMethod.GET)	
+	public CreateAccountDTO teste() {
+		
+		CreateAccountDTO dto = new CreateAccountDTO();
+		
+		dto.setExternalIdentifier("11975132627");
+		dto.setClient(new ClientDTO());
+		dto.getClient().setName("ALEX SIMAS BRAZ");
+		dto.getClient().setTaxIdentifier(new TaxIdentifierDTO());
+		dto.getClient().getTaxIdentifier().setTaxId("82344612068");
+		dto.getClient().getTaxIdentifier().setCountry("BRA");
+		dto.getClient().setMobilePhone(new MobilePhoneDTO());
+		dto.getClient().getMobilePhone().setPhoneNumber("11975132627");
+		dto.getClient().setEmail("alexjavabraz@gmail.com");
+		dto.setBillingAddress(new BillingAddressDTO());
+		dto.getBillingAddress().setLogradouro("lOGRADOURO UNICO");
+		dto.getBillingAddress().setNumero("999");
+		dto.getBillingAddress().setBairro("BAIRRO");
+		dto.getBillingAddress().setCidade("CIDADE");
+		dto.getBillingAddress().setEstado("SP");
+		dto.getBillingAddress().setCep("13100321");
+		dto.getBillingAddress().setPais("BRA");
+		
+		dto.setClientType("PERSON");
+		
+		dto.setAccountType("ORDINARY");
+		dto.setAdditionalDetailsPerson(new AdditionalDetailsPersonDTO());
+		dto.getAdditionalDetailsPerson().setGender("M");
+		dto.getAdditionalDetailsPerson().setFather("PAI DO CLIENTE 1");
+		dto.getAdditionalDetailsPerson().setMother("MAE DO CLIENTE 1");
+		dto.getAdditionalDetailsPerson().setBirthDate("1970-01-01");
+		dto.getAdditionalDetailsPerson().setBirthCity("CIDADE");
+		dto.getAdditionalDetailsPerson().setBirthState("SP");
+		dto.getAdditionalDetailsPerson().setBirthCountry("BRA");
+		dto.getAdditionalDetailsPerson().setRg(new RgDTO());
+		dto.getAdditionalDetailsPerson().getRg().setNumber("325912840");
+		dto.getAdditionalDetailsPerson().getRg().setIssueDate("1980-01-01");
+		dto.getAdditionalDetailsPerson().getRg().setIssuer("SSP");
+		dto.getAdditionalDetailsPerson().getRg().setState("SP");
+		dto.getAdditionalDetailsPerson().setMaritalStatus("SINGLE");
+		return dto;
+	}	
+
+	
+	
+	private void validateCreate(CreateAccountDTO create) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	private void validateUser(String userId) {
+		this.userService.findByUserName(userId).orElseThrow(
+				() -> new UserNotFoundException(userId));
+	}
+	
+
+	public ResponseEntity<?> todo(CreateAccountDTO create){
+		return this.accountService
+				.findByUserNameLike(create.getClient().getName())
+				.map(account -> {
+					
+//					Account result = bookmarkRepository.save(new Bookmark(account,
+//							input.getUri(), input.getDescription()));
+					
+					account = accountService.salvar(account);
+
+					URI location = ServletUriComponentsBuilder
+						.fromCurrentRequest().path("/{id}")
+						.buildAndExpand(account.getId()).toUri();
+
+					return ResponseEntity.created(location).build();
+				})
+				.orElse(ResponseEntity.noContent().build());
+	}
+
+	 
 
 }

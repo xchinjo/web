@@ -10,8 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "usuario")
-public class Usuario implements Serializable {
+@Table(name = "user")
+public class User implements Serializable {
 
 	/**
 	 * 
@@ -20,25 +20,25 @@ public class Usuario implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id_usuario")
+	@Column(name = "id_user")
 	private Long id;
 
-	@Column(name = "nm_usuario")
-	private String nome;
+	@Column(name = "nm_user")
+	private String name;
 
 	@Column(name = "password")
 	private String password;
 
-	@Column(name = "email_usuario")
+	@Column(name = "email_user")
 	private String email;
 
-	public Usuario(String nome, String password, String email) {
-		this.nome = nome;
+	public User(String nome, String password, String email) {
+		this.name = nome;
 		this.password = password;
 		this.email = email;
 	}
 
-	public Usuario() {
+	public User() {
 	}
 
 	public Long getId() {
@@ -50,11 +50,11 @@ public class Usuario implements Serializable {
 	}
 
 	public String getNome() {
-		return nome;
+		return name;
 	}
 
 	public void setNome(String nome) {
-		this.nome = nome;
+		this.name = nome;
 	}
 
 	public String getPassword() {

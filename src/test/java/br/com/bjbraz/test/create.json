@@ -1,0 +1,44 @@
+{
+	"externalIdentifier": "872624880001032018049415228710",
+	"sharedAccount": false,
+	"creditDate": 32,
+	"client": {
+		"name": "ALEX SIMAS BRAZ 872624880001032018049415228710",
+		"taxIdentifier": {
+			"taxId": "15420825872",
+			"country": "BRA"
+		},
+		"mobilePhone": {
+			"country": "BRA",
+			"phoneNumber": "872624880001032018049415228710"
+		},
+		"email": "872624880001032018049415228710@gmail.com"
+	},
+	"clientType": "PERSON",
+	"accountType": "ORDINARY",
+	"billingAddress": {
+		"logradouro": "lOGRADOURO UNICO872624880001032018049415228710",
+		"numero": "999",
+		"bairro": "BAIRRO",
+		"cidade": "CIDADE",
+		"estado": "SP",
+		"cep": "13100CYPHER321",
+		"pais": "BRA"
+	},
+	"additionalDetailsPerson": {
+		"gender": "M",
+		"father": "PAI DO CLIENTE872624880001032018049415228710",
+		"mother": "MAE DO CLIENTE872624880001032018049415228710",
+		"birthDate": "1970-01-01",
+		"birthCity": "CIDADE",
+		"birthState": "SP",
+		"birthCountry": "BRA",
+		"rg": {
+			"number": "325912840",
+			"issueDate": "1980-01-01",
+			"state": "SP",
+			"issuer": "SSP"
+		},
+		"maritalStatus": "SINGLE"
+	}
+}

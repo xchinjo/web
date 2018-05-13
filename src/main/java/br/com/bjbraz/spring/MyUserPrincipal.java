@@ -8,16 +8,16 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import br.com.bjbraz.domain.Usuario;
+import br.com.bjbraz.domain.User;
 
 public class MyUserPrincipal  implements UserDetails {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -1983254493831734958L;
-	private Usuario user;
+	private User user;
  
-    public MyUserPrincipal(Usuario user) {
+    public MyUserPrincipal(User user) {
         this.user = user;
     }
 
