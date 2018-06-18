@@ -1,0 +1,44 @@
+{
+	"externalIdentifier": "11975132651",
+	"sharedAccount": false,
+	"creditDate": 32,
+	"client": {
+		"name": "CONTA PF SUBORDINADA - 11975132651",
+		"taxIdentifier": {
+			"taxId": "15420825872",
+			"country": "BRA"
+		},
+		"mobilePhone": {
+			"country": "BRA",
+			"phoneNumber": "11975132651"
+		},
+		"email": "cliente.pf.11975132651@email.com"
+	},
+	"clientType": "PERSON",
+	"accountType": "ORDINARY",
+	"billingAddress": {
+		"logradouro": "LOGRADOURO CLIENTE PF 11975132651",
+		"numero": "999",
+		"bairro": "BAIRRO",
+		"cidade": "CIDADE",
+		"estado": "SP",
+		"cep": "13100321",
+		"pais": "BRA"
+	},
+	"additionalDetailsPerson": {
+		"gender": "M",
+		"father": "PAI DO CLIENTE PF 11975132651",
+		"mother": "MAE DO CLIENTE PF 11975132651",
+		"birthDate": "1970-01-01",
+		"birthCity": "CIDADE",
+		"birthState": "SP",
+		"birthCountry": "BRA",
+		"rg": {
+			"number": "325912840",
+			"issueDate": "1980-01-01",
+			"state": "SP",
+			"issuer": "SSP"
+		},
+		"maritalStatus": "SINGLE"
+	}
+}

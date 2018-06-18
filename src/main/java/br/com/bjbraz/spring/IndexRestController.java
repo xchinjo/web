@@ -1,28 +1,39 @@
 package br.com.bjbraz.spring;
 
-import java.net.URI;
+import static br.com.bjbraz.spring.ContractRestURIConstants.CYPHER;
+import static br.com.bjbraz.spring.ContractRestURIConstants.URI;
+import static br.com.bjbraz.spring.ContractRestURIConstants.URI_SEARCH_ACCOUNTS;
+import static br.com.bjbraz.spring.ContractRestURIConstants.encode;
+import static br.com.bjbraz.spring.ContractRestURIConstants.toJson;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
+import java.util.Arrays;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.ClientHttpRequestFactory;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import br.com.bjbraz.dto.account.AdditionalDetailsPersonDTO;
-import br.com.bjbraz.dto.account.BillingAddressDTO;
-import br.com.bjbraz.dto.account.ClientDTO;
 import br.com.bjbraz.dto.account.CreateAccountDTO;
-import br.com.bjbraz.dto.account.MobilePhoneDTO;
-import br.com.bjbraz.dto.account.RgDTO;
-import br.com.bjbraz.dto.account.TaxIdentifierDTO;
+import br.com.bjbraz.dto.account.SearchAccountDTO;
+import br.com.bjbraz.dto.withdraw.WithDrawDTO;
 import br.com.bjbraz.exception.UserNotFoundException;
 import br.com.bjbraz.service.AccountService;
 import br.com.bjbraz.service.TransactionService;
@@ -40,6 +51,7 @@ public class IndexRestController {
 	private TransactionService transacaoService;
 	private AccountService accountService;
 	private UserService userService;
+    private static final Logger log = LoggerFactory.getLogger(IndexRestController.class);
 
 	private static final String RETORNO_ERRO = "Invalid Values";
 
@@ -50,73 +62,140 @@ public class IndexRestController {
 		this.userService = u;
 	}
 	
+	/**
+	 * 
+	 * @param create
+	 * @return
+	 */
 	@CrossOrigin
 	@RequestMapping(value = ContractRestURIConstants.CRIAR_CONTA_PF, method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)	
-	public String createAccount(@RequestHeader(value="transaction-hash") String hash, @RequestBody CreateAccountDTO create) {
-		
-		if(hash == null) {
-			return null;
-		}
-		
+	public String createAccount(@RequestBody CreateAccountDTO create) {
 		this.validateCreate(create);
 		
-		create.setAccountType(ContractRestURIConstants.CONTA_PF);
-		
-		ObjectMapper mapper = new ObjectMapper();
         try {
-            String json = mapper.writeValueAsString(create);
-            System.out.println("JSON = " + json);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
+        	
+    		return createAccountBePay(create);
+
+        } catch (Exception e) {
+            return generateJson("Error " + e.getMessage());
         }
 		
-		return "";
 	}
 	
 	@CrossOrigin
-	@RequestMapping(value = ContractRestURIConstants.CRIAR_CONTA_PF_TEST, method = RequestMethod.GET)	
-	public CreateAccountDTO teste() {
+	@RequestMapping(value = ContractRestURIConstants.SALDO_CONTA_PF, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)	
+	public String getBalance(@PathVariable("account")  String sellerAccount) {
 		
-		CreateAccountDTO dto = new CreateAccountDTO();
-		
-		dto.setExternalIdentifier("11975132627");
-		dto.setClient(new ClientDTO());
-		dto.getClient().setName("ALEX SIMAS BRAZ");
-		dto.getClient().setTaxIdentifier(new TaxIdentifierDTO());
-		dto.getClient().getTaxIdentifier().setTaxId("82344612068");
-		dto.getClient().getTaxIdentifier().setCountry("BRA");
-		dto.getClient().setMobilePhone(new MobilePhoneDTO());
-		dto.getClient().getMobilePhone().setPhoneNumber("11975132627");
-		dto.getClient().setEmail("alexjavabraz@gmail.com");
-		dto.setBillingAddress(new BillingAddressDTO());
-		dto.getBillingAddress().setLogradouro("lOGRADOURO UNICO");
-		dto.getBillingAddress().setNumero("999");
-		dto.getBillingAddress().setBairro("BAIRRO");
-		dto.getBillingAddress().setCidade("CIDADE");
-		dto.getBillingAddress().setEstado("SP");
-		dto.getBillingAddress().setCep("13100321");
-		dto.getBillingAddress().setPais("BRA");
-		
-		dto.setClientType("PERSON");
-		
-		dto.setAccountType("ORDINARY");
-		dto.setAdditionalDetailsPerson(new AdditionalDetailsPersonDTO());
-		dto.getAdditionalDetailsPerson().setGender("M");
-		dto.getAdditionalDetailsPerson().setFather("PAI DO CLIENTE 1");
-		dto.getAdditionalDetailsPerson().setMother("MAE DO CLIENTE 1");
-		dto.getAdditionalDetailsPerson().setBirthDate("1970-01-01");
-		dto.getAdditionalDetailsPerson().setBirthCity("CIDADE");
-		dto.getAdditionalDetailsPerson().setBirthState("SP");
-		dto.getAdditionalDetailsPerson().setBirthCountry("BRA");
-		dto.getAdditionalDetailsPerson().setRg(new RgDTO());
-		dto.getAdditionalDetailsPerson().getRg().setNumber("325912840");
-		dto.getAdditionalDetailsPerson().getRg().setIssueDate("1980-01-01");
-		dto.getAdditionalDetailsPerson().getRg().setIssuer("SSP");
-		dto.getAdditionalDetailsPerson().getRg().setState("SP");
-		dto.getAdditionalDetailsPerson().setMaritalStatus("SINGLE");
-		return dto;
-	}	
+		try {
+	    	ClientHttpRequestFactory requestFactory = getClientHttpRequestFactory();
+			
+			RestTemplate restTemplate = new RestTemplate(requestFactory);
+			
+	    	HttpHeaders requestHeaders = new HttpHeaders();
+	    	requestHeaders.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+	    	requestHeaders.setContentType(MediaType.APPLICATION_JSON);
+	    	requestHeaders.add("api-access-key", "36BE5D3F-61DD-4836-AE21-39D7A8A686D6");
+	    	
+	    	String hash = encode(CYPHER, sellerAccount);
+	    	
+	    	requestHeaders.add("transaction-hash", hash);
+	    	
+	    	String urlCompleta = URI_SEARCH_ACCOUNTS + sellerAccount+"/balance";
+	    	
+	    	HttpEntity<String> entity = new HttpEntity<String>("", requestHeaders);
+	    	
+	    	ResponseEntity<String> response = restTemplate.exchange(urlCompleta, HttpMethod.POST, entity, String.class);
+	    	
+	    	String retorno = (String) response.getBody();
+	    	return retorno;
+	    	
+	    }catch(Exception e) {
+	    	log.error(e.getMessage());
+            return generateJson("Error " + e.getMessage());
+	    }
+	}
+	
+	@CrossOrigin
+	@RequestMapping(value = ContractRestURIConstants.SAQUE, method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public String withDraw(@PathVariable("account")  String sellerAccount, @RequestBody WithDrawDTO withDraw) {
 
+		//String sellerAccount = "AB03C172-4F25-9A24-8C91-7D3DA4A70EB7";
+		
+		try {
+	    	ClientHttpRequestFactory requestFactory = getClientHttpRequestFactory();
+			
+			RestTemplate restTemplate = new RestTemplate(requestFactory);
+			
+	    	HttpHeaders requestHeaders = new HttpHeaders();
+	    	requestHeaders.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+	    	requestHeaders.setContentType(MediaType.APPLICATION_JSON);
+	    	requestHeaders.add("api-access-key", "36BE5D3F-61DD-4836-AE21-39D7A8A686D6");
+	    	
+	    	String urlCompleta = URI_SEARCH_ACCOUNTS + sellerAccount+"/withdraw";
+	    	
+	    	String hash = encode(CYPHER, 
+	    			withDraw.getTotalAmount()+
+	    			sellerAccount+
+	    			withDraw.getWithdrawInfo().getBankTransfer().getBankDestination()+
+	    			withDraw.getWithdrawInfo().getBankTransfer().getBranchDestination()+
+	    			withDraw.getWithdrawInfo().getBankTransfer().getAccountDestination());
+	    	
+	    	requestHeaders.add("transaction-hash", hash);
+	    	
+	    	HttpEntity<WithDrawDTO> entity = new HttpEntity<WithDrawDTO>(withDraw, requestHeaders);
+	    	
+	    	System.out.println(generateJson(withDraw));
+	    	
+	    	ResponseEntity<String> response = restTemplate.exchange(urlCompleta, HttpMethod.POST, entity, String.class);
+	    	
+	    	String retorno = (String) response.getBody();
+	    	return retorno;
+		}catch(Exception e) {
+	    	log.error(e.getMessage());
+		}
+		
+		return "Error";
+		
+	}
+	
+	/**
+	 * 
+	 * @param dto
+	 * @return
+	 */
+	public String createAccountBePay(CreateAccountDTO dto) throws Exception {
+	    
+	    try {
+	    	ClientHttpRequestFactory requestFactory = getClientHttpRequestFactory();
+			
+			RestTemplate restTemplate = new RestTemplate(requestFactory);
+			
+	    	HttpHeaders requestHeaders = new HttpHeaders();
+	    	requestHeaders.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+	    	requestHeaders.setContentType(MediaType.APPLICATION_JSON);
+	    	requestHeaders.add("api-access-key", "36BE5D3F-61DD-4836-AE21-39D7A8A686D6");
+	    	
+	    	String valoresHash = dto.getExternalIdentifier()+dto.getClient().getTaxIdentifier().getTaxId();
+	    	String hash = encode(CYPHER, valoresHash);
+	    	
+	    	requestHeaders.add("transaction-hash", hash);
+	    	
+	    	HttpEntity<String> entity = new HttpEntity<String>(toJson(dto), requestHeaders);
+	    	ResponseEntity<SearchAccountDTO> response = restTemplate.exchange(URI, HttpMethod.POST, entity, SearchAccountDTO.class);
+	    	SearchAccountDTO retorno = (SearchAccountDTO) response.getBody();
+	    	System.out.println(retorno.getData().getAccountStatus());
+	    	System.out.println(retorno.getData().getAccountHolderId());
+	    	System.out.println(retorno.getData().getAccount().getAccountId());
+	    	System.out.println(response.getStatusCode());
+	    	
+	    	return generateJson(retorno);
+	    	
+	    }catch(Exception e) {
+	    	log.error(e.getMessage());
+	    	return generateJson("Error " + e.getMessage());
+	    }
+	    
+	}
 	
 	
 	private void validateCreate(CreateAccountDTO create) {
@@ -129,24 +208,32 @@ public class IndexRestController {
 				() -> new UserNotFoundException(userId));
 	}
 	
-
-	public ResponseEntity<?> todo(CreateAccountDTO create){
-		return this.accountService
-				.findByUserNameLike(create.getClient().getName())
-				.map(account -> {
-					
-//					Account result = bookmarkRepository.save(new Bookmark(account,
-//							input.getUri(), input.getDescription()));
-					
-					account = accountService.salvar(account);
-
-					URI location = ServletUriComponentsBuilder
-						.fromCurrentRequest().path("/{id}")
-						.buildAndExpand(account.getId()).toUri();
-
-					return ResponseEntity.created(location).build();
-				})
-				.orElse(ResponseEntity.noContent().build());
+	/**
+	 * Cretes a http request with 5s timeout
+	 * @return
+	 */
+	private ClientHttpRequestFactory getClientHttpRequestFactory() {
+	    int timeout = 5000;
+	    HttpComponentsClientHttpRequestFactory clientHttpRequestFactory
+	      = new HttpComponentsClientHttpRequestFactory();
+	    clientHttpRequestFactory.setConnectTimeout(timeout);
+	    return clientHttpRequestFactory;
+	}
+	
+	/**
+	 * 
+	 * @param dtoToJson
+	 * @return
+	 */
+	private String generateJson(Object dtoToJson) {
+		ObjectMapper mapper = new ObjectMapper();
+	    try {
+	        String json = mapper.writeValueAsString(dtoToJson);
+	        return json;
+	    } catch (JsonProcessingException e) {
+	        e.printStackTrace();
+	    }
+	    return "";
 	}
 
 	 

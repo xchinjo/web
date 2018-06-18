@@ -1,9 +1,9 @@
 package br.com.bjbraz.test;
 
-import static br.com.bjbraz.spring.ContractRestURIConstants.API_KEY;
 import static br.com.bjbraz.spring.ContractRestURIConstants.CPF;
 import static br.com.bjbraz.spring.ContractRestURIConstants.CYPHER;
 import static br.com.bjbraz.spring.ContractRestURIConstants.URI;
+import static br.com.bjbraz.spring.ContractRestURIConstants.URI_SEARCH_ACCOUNTS;
 import static br.com.bjbraz.spring.ContractRestURIConstants.encode;
 import static br.com.bjbraz.spring.ContractRestURIConstants.generateExternalIdentifier;
 import static br.com.bjbraz.spring.ContractRestURIConstants.toJson;
@@ -11,13 +11,8 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.Arrays;
+import java.util.Date;
 
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.json.JSONObject;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -30,9 +25,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.com.bjbraz.dto.account.AdditionalDetailsPersonDTO;
 import br.com.bjbraz.dto.account.BillingAddressDTO;
@@ -42,6 +38,9 @@ import br.com.bjbraz.dto.account.MobilePhoneDTO;
 import br.com.bjbraz.dto.account.RgDTO;
 import br.com.bjbraz.dto.account.SearchAccountDTO;
 import br.com.bjbraz.dto.account.TaxIdentifierDTO;
+import br.com.bjbraz.dto.withdraw.BankTransferDTO;
+import br.com.bjbraz.dto.withdraw.WithDrawDTO;
+import br.com.bjbraz.dto.withdraw.WithdrawInfoDTO;
 
 public class CreateAccountTest {
 	
@@ -94,6 +93,109 @@ public class CreateAccountTest {
         
 	}
 	
+	@Test
+	public void consultarSaldoTest() {
+		//assertTrue(response.getStatusCodeValue() == 200);
+		String sellerAccount = "AB03C172-4F25-9A24-8C91-7D3DA4A70EB7";
+		
+		try {
+	    	ClientHttpRequestFactory requestFactory = getClientHttpRequestFactory();
+			
+			RestTemplate restTemplate = new RestTemplate(requestFactory);
+			
+	    	HttpHeaders requestHeaders = new HttpHeaders();
+	    	requestHeaders.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+	    	requestHeaders.setContentType(MediaType.APPLICATION_JSON);
+	    	requestHeaders.add("api-access-key", "36BE5D3F-61DD-4836-AE21-39D7A8A686D6");
+	    	
+	    	String hash = encode(CYPHER, sellerAccount);
+	    	
+	    	requestHeaders.add("transaction-hash", hash);
+	    	
+//	    	ResponseEntity<SearchAccountDTO> response = restTemplate.exchange(URI, HttpMethod.GET, String.class );
+	    	
+	    	String urlCompleta = URI_SEARCH_ACCOUNTS + sellerAccount+"/balance";
+	    	
+	    	HttpEntity<String> entity = new HttpEntity<String>("", requestHeaders);
+	    	
+	    	ResponseEntity<String> response = restTemplate.exchange(urlCompleta, HttpMethod.POST, entity, String.class);
+	    	
+	    	String retorno = (String) response.getBody();
+	    	System.out.println(retorno);
+	    	System.out.println(response.getStatusCode());
+		    assertTrue(response.getStatusCodeValue() == 200);
+	    }catch(Exception e) {
+	    	log.error(e.getMessage());
+	    	fail();
+	    }
+		
+	}
+	
+	@Test
+	public void saque() {
+		String sellerAccount = "AB03C172-4F25-9A24-8C91-7D3DA4A70EB7";
+		
+		try {
+	    	ClientHttpRequestFactory requestFactory = getClientHttpRequestFactory();
+			
+			RestTemplate restTemplate = new RestTemplate(requestFactory);
+			
+	    	HttpHeaders requestHeaders = new HttpHeaders();
+	    	requestHeaders.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+	    	requestHeaders.setContentType(MediaType.APPLICATION_JSON);
+	    	requestHeaders.add("api-access-key", "36BE5D3F-61DD-4836-AE21-39D7A8A686D6");
+	    	
+	    	String urlCompleta = URI_SEARCH_ACCOUNTS + sellerAccount+"/withdraw";
+	    	
+	    	WithDrawDTO withDraw = new WithDrawDTO();
+	    	withDraw.setWithdrawInfo(new WithdrawInfoDTO());
+	    	withDraw.getWithdrawInfo().setBankTransfer(new BankTransferDTO());
+	    	withDraw.getWithdrawInfo().getBankTransfer().setTaxIdentifier(new br.com.bjbraz.dto.withdraw.TaxIdentifierDTO());
+	    	
+	    	withDraw.setTotalAmount("1");
+	    	withDraw.setCurrency("BRL");
+	    	withDraw.setExternalIdentifier(String.valueOf(System.currentTimeMillis()));
+	    	withDraw.setTransactionDate(new Date());
+	    	
+	    	withDraw.getWithdrawInfo().getBankTransfer().setAccountTypeDestination("1");
+	    	withDraw.getWithdrawInfo().getBankTransfer().setBankDestination("341");
+	    	withDraw.getWithdrawInfo().getBankTransfer().setBranchDestination("2964");
+	    	withDraw.getWithdrawInfo().getBankTransfer().setAccountDestination("051805");
+	    	
+	    	withDraw.getWithdrawInfo().getBankTransfer().getTaxIdentifier().setCountry("BRA");
+	    	withDraw.getWithdrawInfo().getBankTransfer().getTaxIdentifier().setTaxId("76683272743");
+	    	
+	    	
+	    	withDraw.getWithdrawInfo().getBankTransfer().setPersonType("PERSON");
+	    	withDraw.getWithdrawInfo().getBankTransfer().setName("CONTA 13902836901");
+	    	withDraw.getWithdrawInfo().getBankTransfer().setAccountDestination("1");
+	    	
+	    	String hash = encode(CYPHER, 
+	    			withDraw.getTotalAmount()+
+	    			sellerAccount+
+	    			withDraw.getWithdrawInfo().getBankTransfer().getBankDestination()+
+	    			withDraw.getWithdrawInfo().getBankTransfer().getBranchDestination()+
+	    			withDraw.getWithdrawInfo().getBankTransfer().getAccountDestination());
+	    	
+	    	requestHeaders.add("transaction-hash", hash);	    	
+	    	
+	    	HttpEntity<WithDrawDTO> entity = new HttpEntity<WithDrawDTO>(withDraw, requestHeaders);
+	    	
+	    	System.out.println(generateJson(withDraw));
+	    	
+	    	ResponseEntity<String> response = restTemplate.exchange(urlCompleta, HttpMethod.POST, entity, String.class);
+	    	
+	    	String retorno = (String) response.getBody();
+	    	System.out.println(retorno);
+	    	System.out.println(response.getStatusCode());
+		    assertTrue(response.getStatusCodeValue() == 200);
+	    }catch(Exception e) {
+	    	log.error(e.getMessage());
+	    	fail();
+	    }
+		
+	}	
+	
 	/**
 	 * 
 	 * @param dto
@@ -111,14 +213,17 @@ public class CreateAccountTest {
 	    	requestHeaders.setContentType(MediaType.APPLICATION_JSON);
 	    	requestHeaders.add("api-access-key", "36BE5D3F-61DD-4836-AE21-39D7A8A686D6");
 	    	
-	    	String valoresHash = dto.getExternalIdentifier()+CPF;
+	    	String valoresHash = dto.getExternalIdentifier()+dto.getClient().getTaxIdentifier().getTaxId();
 	    	String hash = encode(CYPHER, valoresHash);
 	    	
 	    	requestHeaders.add("transaction-hash", hash);
 	    	
 	    	HttpEntity<String> entity = new HttpEntity<String>(toJson(dto), requestHeaders);
 	    	ResponseEntity<SearchAccountDTO> response = restTemplate.exchange(URI, HttpMethod.POST, entity, SearchAccountDTO.class);
-	    	System.out.println(response.getBody());
+	    	SearchAccountDTO retorno = (SearchAccountDTO) response.getBody();
+	    	System.out.println(retorno.getData().getAccountStatus());
+	    	System.out.println(retorno.getData().getAccountHolderId());
+	    	System.out.println(retorno.getData().getAccount().getAccountId());
 	    	System.out.println(response.getStatusCode());
 		    assertTrue(response.getStatusCodeValue() == 200);
 	    }catch(Exception e) {
@@ -127,102 +232,23 @@ public class CreateAccountTest {
 	    }
 	}
 	
-	public boolean create2(CreateAccountDTO dto) {
-
-	    try {
-	    	ClientHttpRequestFactory requestFactory = getClientHttpRequestFactory();
-			
-			RestTemplate restTemplate = new RestTemplate(requestFactory);
-	    	
-	    	HttpHeaders headers = new HttpHeaders();
-	 	    headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-	 	    headers.setContentType(MediaType.APPLICATION_JSON);
-	 	    
-	    	String valoresHash = dto.getExternalIdentifier()+CPF;
-	    	String hash = encode(CYPHER, valoresHash);
-	    	
-	 	    headers.add("api-access-key", "36BE5D3F-61DD-4836-AE21-39D7A8A686D6");
-	 	    headers.add("transaction-hash", hash);
-//	 	    HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
-	 	    
-	    	MultiValueMap<String, String> postParameters = new LinkedMultiValueMap<String, String>();
-//	    	postParameters.add("api-access-key", "36BE5D3F-61DD-4836-AE21-39D7A8A686D6");
-//	    	postParameters.add("transaction-hash", hash);
-	 	    
-	    	HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<MultiValueMap<String, String>>(postParameters, headers);
-
-	    	System.out.println(valoresHash);
-	    	System.out.println(hash);
-	    	System.out.println(toJson(dto));
-	    	
-	    	Object result = restTemplate.postForObject( URI, dto, CreateAccountDTO.class, headers);
-	    	System.out.println(result);
-	    	return true;
-	    }catch(Exception e) {
-	    	log.error(e.getMessage());
-	    	return false;
-	    }	    
-	}
-	
-    public boolean create3(CreateAccountDTO dto){
-    	try {
-	        CloseableHttpClient client = HttpClients.createDefault();
-	        HttpPost httpPost = new HttpPost(URI);
-	        
-	        String valoresHash = dto.getExternalIdentifier()+CPF;
-	    	String hash = encode(API_KEY, valoresHash);
-	     
-	        StringEntity entity = new StringEntity(toJson(dto));
-	        httpPost.setEntity(entity);
-	        httpPost.setHeader("Accept", "application/json");
-	        httpPost.setHeader("Content-type", "application/json");
-	        httpPost.setHeader("Api-Access-Key", "36BE5D3F-61DD-4836-AE21-39D7A8A686D6");
-	        httpPost.setHeader("Transaction-Hash", hash);
-	     
-	        CloseableHttpResponse response = client.execute(httpPost);
-	        System.out.println(response.getStatusLine().getStatusCode());
-	        client.close();
-	        return (response.getStatusLine().getStatusCode() == 200);
-	        
-    	}catch(Exception e) {
-	    	log.error(e.getMessage());
-	    	return false;
-    	}
-    }
-    
-    public boolean create4(CreateAccountDTO dto) {
-    	try {
-    		
-	        String valoresHash = dto.getExternalIdentifier()+CPF;
-	    	String hash = encode(API_KEY, valoresHash);
-	
-	    	HttpHeaders httpHeaders = new HttpHeaders();
-	    	httpHeaders.set("Content-Type", "application/json");
-	    	httpHeaders.set("Accept", "application/json");
-	    	httpHeaders.set("Content-type", "application/json");
-	    	httpHeaders.set("Api-Access-Key", "36BE5D3F-61DD-4836-AE21-39D7A8A686D6");
-	    	httpHeaders.set("Transaction-Hash", hash);	    	
-	
-	    	HttpEntity <String> httpEntity = new HttpEntity <String> (toJson(dto), httpHeaders);
-	
-	    	RestTemplate restTemplate = new RestTemplate();
-	    	String response = restTemplate.postForObject(URI, httpEntity, String.class);
-	
-	    	JSONObject jsonObj = new JSONObject(response);
-	    	String balance = jsonObj.get("data").toString();
-	    	return true;
-    	}catch(Exception e) {
-    		log.error(e.getMessage());
-    		return false;
-    	}
-    }
-	
 	private ClientHttpRequestFactory getClientHttpRequestFactory() {
 	    int timeout = 5000;
 	    HttpComponentsClientHttpRequestFactory clientHttpRequestFactory
 	      = new HttpComponentsClientHttpRequestFactory();
 	    clientHttpRequestFactory.setConnectTimeout(timeout);
 	    return clientHttpRequestFactory;
+	}
+	
+	private String generateJson(Object dtoToJson) {
+		ObjectMapper mapper = new ObjectMapper();
+	    try {
+	        String json = mapper.writeValueAsString(dtoToJson);
+	        return json;
+	    } catch (JsonProcessingException e) {
+	        e.printStackTrace();
+	    }
+	    return "";
 	}
  
 	

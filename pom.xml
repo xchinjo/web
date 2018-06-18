@@ -3,11 +3,11 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>br.com.bjbraz</groupId>
-	<artifactId>notas</artifactId>
+	<artifactId>api</artifactId>
 <!-- 	<packaging>jar</packaging> -->
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Notas API Webapp</name>
-	<description>Notas ASB</description>
+	<name>API Webapp</name>
+	<description>API</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -137,7 +137,7 @@
 					<artifactId>spring-boot-maven-plugin</artifactId>
 				</plugin>
 			</plugins>
-		<finalName>BLOCKCHAIN-WEB</finalName>
+		<finalName>api</finalName>
 	</build>
 
 </project>

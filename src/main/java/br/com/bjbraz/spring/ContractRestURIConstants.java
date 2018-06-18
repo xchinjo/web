@@ -33,7 +33,8 @@ public class ContractRestURIConstants {
 
 	public static final String LOGIN = "/login";
 	public static final String SALDO = "/rest/eth/saldo/{id}";
-	public static final String SAQUE = "/rest/eth/saque";
+	public static final String SAQUE = "/rest/withdraw/{account}";
+	public static final String SAQUE_TEST = "/rest/withdraw/test";
 	public static final String LISTAR_TODAS_TRANSACOES = "/rest/listTodasTrancoes";
 	public static final String LISTAR_TRANSACOES_POR_CONTA = "/rest/listTrancoes/{id}";
 	public static final String CADASTRO_USUARIO = "/rest/eth/cadastroUsuario";
@@ -42,6 +43,7 @@ public class ContractRestURIConstants {
 	public static final String DASHBOARD = "/dashboard";
 	public static final String CONTRATAR = "/contratar";
 	public static final String CRIAR_CONTA_PF    = "/rest/createAccountpf";
+	public static final String SALDO_CONTA_PF    = "/rest/getBalancepf/{account}";
 	public static final String CRIAR_CONTA_PF_TEST = "/rest/createAccountpf/test";
 	public static final String CONTA_PF = "PERSONAL";
 	public static final String CONTA_PJ = "CORPORATE";
@@ -49,7 +51,8 @@ public class ContractRestURIConstants {
 	public static final String API_KEY = "36BE5D3F-61DD-4836-AE21-39D7A8A686D6";
 	public static final String CYPHER = "C0F5471D-86D6-4C46-B6C9-7A6F46AA16DF";
 	public static final String CPF = "15420825872";
-	public static final String URI = "http://public-api-elb-1090807689.us-west-2.elb.amazonaws.com/v1/accounts";//"http://localhost:8080/rest/createAccountpf" ; // 
+	public static final String URI = "http://public-api-elb-1090807689.us-west-2.elb.amazonaws.com/v1/accounts";//"http://localhost:8080/rest/createAccountpf" ; //
+	public static final String URI_BALANCE = "http://public-api-elb-1090807689.us-west-2.elb.amazonaws.com/v1/accounts";//"http://localhost:8080/rest/createAccountpf" ; //
 	public static final String URI_SEARCH_ACCOUNTS = "http://public-api-elb-1090807689.us-west-2.elb.amazonaws.com/v1/accounts/";//"http://localhost:8080/rest/createAccountpf" ; //
 	public static final String MEDIATOR_ACCOUNT_ID = "03828F0A-F12A-D2F0-5F78-A2C62E820FF2"; //mediator account id
 
