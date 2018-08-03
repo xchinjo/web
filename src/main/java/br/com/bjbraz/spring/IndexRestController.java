@@ -5,8 +5,6 @@ import static br.com.bjbraz.spring.ContractRestURIConstants.URI;
 import static br.com.bjbraz.spring.ContractRestURIConstants.URI_SEARCH_ACCOUNTS;
 import static br.com.bjbraz.spring.ContractRestURIConstants.encode;
 import static br.com.bjbraz.spring.ContractRestURIConstants.toJson;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import java.util.Arrays;
 
