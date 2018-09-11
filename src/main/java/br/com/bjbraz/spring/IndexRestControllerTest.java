@@ -1,28 +1,15 @@
 package br.com.bjbraz.spring;
 
 import static br.com.bjbraz.spring.ContractRestURIConstants.CPF;
-import static br.com.bjbraz.spring.ContractRestURIConstants.CYPHER;
-import static br.com.bjbraz.spring.ContractRestURIConstants.URI_SEARCH_ACCOUNTS;
-import static br.com.bjbraz.spring.ContractRestURIConstants.encode;
 import static br.com.bjbraz.spring.ContractRestURIConstants.generateExternalIdentifier;
 
-import java.util.Arrays;
 import java.util.Date;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 
 import br.com.bjbraz.dto.account.AdditionalDetailsPersonDTO;
 import br.com.bjbraz.dto.account.BillingAddressDTO;

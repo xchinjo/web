@@ -56,7 +56,11 @@ public class ContractRestURIConstants {
 	public static final String URI_SEARCH_ACCOUNTS = "http://public-api-elb-1090807689.us-west-2.elb.amazonaws.com/v1/accounts/";//"http://localhost:8080/rest/createAccountpf" ; //
 	public static final String MEDIATOR_ACCOUNT_ID = "03828F0A-F12A-D2F0-5F78-A2C62E820FF2"; //mediator account id
 
-	public static final String SALVAR_ESTATS_BLOCKCHAIN    = "/rest/eth/setData";
+	public static final String SALVAR_ESTATS_BLOCKCHAIN          = "/rest/eth/setData";
+	public static final String REGISTRAR_ARQUIVO_BLOCKCHAIN      = "/rest/nem/notarize/{documentHash}";
+	public static final String LISTAR_TODOS_ARQUIVOS_REGISTRADOS = "/rest/nem/notarize/searchAll";
+	public static final String BUSCAR_ARQUIVO_POR_HASH           = "/rest/nem/notarize/search/{documentHash}";
+
 
 	public static String toJson(CreateAccountDTO dto) {
 		ObjectMapper mapper = new ObjectMapper();

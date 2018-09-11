@@ -25,32 +25,32 @@ public class MvcSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.csrf().disable().authorizeRequests().antMatchers("/resources/**").permitAll().antMatchers("/index")
 //		.authenticated()
-		.permitAll().antMatchers("/rest/**").permitAll()
-		.anyRequest().hasAnyRole("ADMIN")
-		.anyRequest().authenticated()
+		.permitAll().antMatchers("/rest/**").permitAll();
+//		.anyRequest().hasAnyRole("ADMIN")
+//		.anyRequest().authenticated()
 		//.antMatchers("/**", "/rest/listTodasTrancoes").authenticated().anyRequest().hasAnyRole("ADMIN")
-		.and().formLogin()
-		.loginPage("/login").usernameParameter("userName").passwordParameter("password")
-		.successHandler((req,res,auth)->{
-			res.sendRedirect("/dashboard");
-	      })
-		.failureHandler((req,res,exp)->{
-			String errMsg="";
-	         if(exp.getClass().isAssignableFrom(BadCredentialsException.class)){
-	            errMsg="Invalid e-mail or password.";
-	         }else{
-	            errMsg="Unknown error - "+exp.getMessage();
-	         }
-	         req.getSession().setAttribute("message", errMsg);
-	         res.sendRedirect("/login");
-		})
-		.permitAll()
-		.and()
-		.logout()
-		.logoutUrl("/logout")
-		.clearAuthentication(true)
-		.logoutSuccessUrl("/index")
-		.permitAll(); //.httpBasic() para utilizar autenticação do browser
+//		.and().formLogin()
+//		.loginPage("/login").usernameParameter("userName").passwordParameter("password")
+//		.successHandler((req,res,auth)->{
+//			res.sendRedirect("/dashboard");
+//	      })
+//		.failureHandler((req,res,exp)->{
+//			String errMsg="";
+//	         if(exp.getClass().isAssignableFrom(BadCredentialsException.class)){
+//	            errMsg="Invalid e-mail or password.";
+//	         }else{
+//	            errMsg="Unknown error - "+exp.getMessage();
+//	         }
+//	         req.getSession().setAttribute("message", errMsg);
+//	         res.sendRedirect("/login");
+//		})
+//		.permitAll()
+//		.and()
+//		.logout()
+//		.logoutUrl("/logout")
+//		.clearAuthentication(true)
+//		.logoutSuccessUrl("/index")
+//		.permitAll(); //.httpBasic() para utilizar autenticação do browser
 	}
 	
 	@Bean
